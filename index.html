@@ -358,15 +358,19 @@
     }
     .font-btn:hover { border-color: var(--gold-dim); color: var(--text); }
 
-    /* Chapter content inside accordion */
+    /* Chapter content */
     .text-reader {
       max-width: 720px;
       margin: 0 auto;
       padding: 1.5rem 1.2rem 2.5rem;
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 1.08rem;
-      line-height: 1.9;
+      font-size: clamp(1rem, 2.5vw, 1.12rem);
+      line-height: 1.85;
       color: var(--text);
+      letter-spacing: 0.01em;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      word-break: break-word;
     }
     .text-reader .verse-header {
       display: flex;
@@ -413,13 +417,17 @@
       letter-spacing: 0.1em;
     }
     .text-reader .translation-text {
-      color: var(--gold-dim);
+      color: #d4b67a;
       font-style: italic;
       margin-bottom: 0.8rem;
+      line-height: 1.75;
     }
     .text-reader p {
       margin-bottom: 1rem;
       text-align: justify;
+    }
+    .text-reader .significado-text {
+      text-indent: 1.5em;
     }
 
     /* Footer */
@@ -450,8 +458,15 @@
       .track audio { width: 100%; grid-column: 1 / -1; }
       .track .download-link { grid-column: 1 / -1; text-align: center; }
       .track-title { white-space: normal; }
-      .text-reader { padding: 1.2rem 1rem 2rem; font-size: 1rem; }
+      .text-reader {
+        padding: 1.2rem 1rem 2rem;
+        font-size: clamp(0.95rem, 4vw, 1.05rem);
+        line-height: 1.75;
+        letter-spacing: 0.015em;
+      }
       .text-reader p { text-align: left; }
+      .text-reader .translation-text { line-height: 1.7; }
+      .texto-nav { margin-top: 1rem; }
       .acc-header { padding: 0.85rem 1rem; }
     }
   </style>
