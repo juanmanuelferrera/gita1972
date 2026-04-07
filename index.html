@@ -535,62 +535,20 @@
     <div class="container">
       <div class="section-header">
         <h2>Preliminares</h2>
-        <p>Portada, prólogo, prefacio e introducción</p>
       </div>
-      <div class="track-list">
-        <div class="track">
-          <span class="track-num">1</span>
-          <div class="track-info"><div class="track-title">Portada</div></div>
-          <span class="track-duration">0:36</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3?dl" download>&#8595;</a>
-        </div>
-        <div class="track">
-          <span class="track-num">2</span>
-          <div class="track-info"><div class="track-title">Prólogo</div></div>
-          <span class="track-duration">4:12</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3?dl" download>&#8595;</a>
-        </div>
-        <div class="track">
-          <span class="track-num">3</span>
-          <div class="track-info"><div class="track-title">Prefacio</div></div>
-          <span class="track-duration">8:38</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3?dl" download>&#8595;</a>
-        </div>
-        <div class="track">
-          <span class="track-num">4</span>
-          <div class="track-info"><div class="track-title">Introducción — Parte 1</div></div>
-          <span class="track-duration">31:54</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3?dl" download>&#8595;</a>
-        </div>
-        <div class="track">
-          <span class="track-num">5</span>
-          <div class="track-info"><div class="track-title">Introducción — Parte 2</div></div>
-          <span class="track-duration">48:47</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3?dl" download>&#8595;</a>
-        </div>
-        <div class="track">
-          <span class="track-num">6</span>
-          <div class="track-info"><div class="track-title">Introducción — Parte 3</div></div>
-          <span class="track-duration">1:39</span>
-          <audio controls preload="none">
-            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3" type="audio/mpeg">
-          </audio>
-          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3?dl" download>&#8595;</a>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1rem">
+        <select class="verse-select" id="prelim-select" style="width:100%;max-width:400px;font-size:1rem;padding:0.75rem 2.2rem 0.75rem 1rem;background:#1a1a30;border:1px solid #f5c84230;border-radius:10px;font-weight:500">
+          <option value="">Seleccionar...</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3">Portada (0:36)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3">Prólogo (4:12)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3">Prefacio (8:38)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3">Introducción — Parte 1 (31:54)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3">Introducción — Parte 2 (48:47)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3">Introducción — Parte 3 (1:39)</option>
+        </select>
+        <div id="prelim-player" style="width:100%;max-width:500px;display:none;text-align:center">
+          <audio controls id="prelim-audio" style="width:100%;height:44px" preload="none"></audio>
+          <a class="download-link" id="prelim-download" href="#" download style="display:inline-block;margin-top:0.5rem">Descargar MP3</a>
         </div>
       </div>
     </div>
@@ -763,6 +721,18 @@
         document.getElementById('font-fab').classList.toggle('visible', btn.dataset.tab === 'texto' && currentChapter > 0);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+    });
+
+    // Preliminares dropdown
+    document.getElementById('prelim-select').addEventListener('change', function() {
+      const player = document.getElementById('prelim-player');
+      const audio = document.getElementById('prelim-audio');
+      const dl = document.getElementById('prelim-download');
+      if (!this.value) { player.style.display = 'none'; return; }
+      audio.src = this.value;
+      dl.href = this.value + '?dl';
+      player.style.display = 'block';
+      audio.play();
     });
 
     // Chapter data
