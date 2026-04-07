@@ -596,7 +596,7 @@
           <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3">Introducción — Parte 3 (1:39)</option>
         </select>
         <div id="prelim-player" style="width:100%;max-width:500px;display:none;text-align:center">
-          <audio controls id="prelim-audio" style="width:100%;height:44px" preload="none">
+          <audio controls id="prelim-audio" style="width:100%;height:44px" preload="metadata">
             <source id="prelim-source" src="" type="audio/mpeg">
           </audio>
           <a class="download-link" id="prelim-download" href="#" download style="display:inline-block;margin-top:0.5rem">Descargar MP3</a>
@@ -799,6 +799,7 @@
       dl.href = this.value + '?dl';
       player.style.display = 'block';
       audio.load();
+      audio.play().catch(function(){});
     });
 
     // Chapter data
