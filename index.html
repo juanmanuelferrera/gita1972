@@ -918,6 +918,9 @@
 
       // Show font FAB
       document.getElementById('font-fab').classList.add('visible');
+
+      // Scroll so nav is already in sticky position
+      document.getElementById('texto-nav').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     // Chapter dropdown
