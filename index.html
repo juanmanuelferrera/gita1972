@@ -347,17 +347,36 @@
     }
     .verse-select:focus { border-color: var(--gold-dim); outline: none; }
     .verse-select option { background: var(--surface); color: var(--text); }
-    .font-btn {
+    /* Font size FAB */
+    .font-fab {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 50;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .font-fab.visible { display: flex; }
+    .font-fab-btn {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.3rem 0.6rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: var(--text-dim);
       font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
     }
-    .font-btn:hover { border-color: var(--gold-dim); color: var(--text); }
+    .font-fab-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .font-fab-btn:last-child { font-size: 0.95rem; }
 
     /* Chapter content */
     .text-reader {
@@ -470,7 +489,9 @@
       .texto-nav { margin-top: 1rem; gap: 0.4rem; padding: 0.6rem 0.5rem; }
       .texto-nav .verse-select { font-size: 0.78rem; padding: 0.35rem 1.5rem 0.35rem 0.5rem; }
       .texto-nav .verse-select:first-child { flex: 1; min-width: 0; }
-      .texto-nav .font-btn { padding: 0.25rem 0.5rem; }
+      .font-fab { bottom: 1rem; right: 1rem; }
+      .font-fab-btn { width: 2.2rem; height: 2.2rem; font-size: 0.78rem; }
+      .font-fab-btn:last-child { font-size: 0.88rem; }
       .acc-header { padding: 0.85rem 1rem; }
     }
   </style>
@@ -713,8 +734,10 @@
       <select class="verse-select" id="nav-verse">
         <option value="">Verso...</option>
       </select>
-      <button class="font-btn" onclick="changeFontSize(-0.08)">A-</button>
-      <button class="font-btn" onclick="changeFontSize(0.08)" style="font-size:1rem">A+</button>
+    </div>
+    <div class="font-fab" id="font-fab">
+      <button class="font-fab-btn" onclick="changeFontSize(-0.08)">A-</button>
+      <button class="font-fab-btn" onclick="changeFontSize(0.08)">A+</button>
     </div>
 
     <div class="container">
@@ -738,6 +761,7 @@
         document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        document.getElementById('font-fab').classList.toggle('visible', btn.dataset.tab === 'texto' && currentChapter > 0);
       });
     });
 
@@ -892,6 +916,8 @@
         navVerse.appendChild(opt);
       });
 
+      // Show font FAB
+      document.getElementById('font-fab').classList.add('visible');
       // Scroll to top of reader
       reader.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
