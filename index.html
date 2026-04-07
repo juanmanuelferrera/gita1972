@@ -386,16 +386,51 @@
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .reader-back:hover { border-color: var(--gold-dim); color: var(--text); }
-    .reader-chapter-title {
-      font-family: Georgia, 'Times New Roman', serif;
+    .reader-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
       color: var(--gold);
-      font-size: 1rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c4a265'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.6rem center;
+      padding-right: 1.8rem;
+      min-width: 0;
     }
+    .reader-select:focus { border-color: var(--gold-dim); outline: none; }
+    .reader-select option {
+      background: var(--surface);
+      color: var(--text);
+    }
+    .reader-nav-btns {
+      display: flex;
+      justify-content: space-between;
+      padding: 2rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .reader-nav-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      color: var(--gold-dim);
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reader-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .reader-nav-btn:disabled { opacity: 0.25; pointer-events: none; }
     .reader-body {
       max-width: 720px;
       margin: 0 auto;
@@ -818,8 +853,9 @@
   <!-- READER OVERLAY -->
   <div class="reader-overlay" id="reader-overlay">
     <div class="reader-bar">
-      <button class="reader-back" id="reader-back">&larr; Capítulos</button>
-      <span class="reader-chapter-title" id="reader-chapter-title"></span>
+      <button class="reader-back" id="reader-back">&larr;</button>
+      <select class="reader-select" id="chapter-select"></select>
+      <select class="reader-select" id="verse-select"><option value="">Verso</option></select>
     </div>
     <div class="reader-body" id="reader-body"></div>
   </div>
@@ -840,29 +876,47 @@
       });
     });
 
-    // Chapter names for reader
-    const chapterNames = {
-      'UNO':'Observando los ejércitos en el campo de batalla de Kurukṣetra',
-      'DOS':'Resumen del contenido del Gītā','TRES':'Karma-yoga',
-      'CUATRO':'Conocimiento trascendental','CINCO':'Karma-yoga — Acción con conciencia de Kṛṣṇa',
-      'SEIS':'Dhyāna-yoga','SIETE':'Conocimiento del Absoluto',
-      'OCHO':'Alcanzando al Supremo','NUEVE':'El conocimiento más confidencial',
-      'DIEZ':'La opulencia del Absoluto','ONCE':'La forma universal',
-      'DOCE':'Servicio devocional','TRECE':'La naturaleza, el disfrutador y la conciencia',
-      'CATORCE':'Las tres modalidades de la naturaleza material',
-      'QUINCE':'El yoga de la Persona Suprema','DIECISÉIS':'Las naturalezas divina y demoníaca',
-      'DIECISIETE':'Las divisiones de la fe','DIECIOCHO':'Conclusión — La perfección de la renunciación'
-    };
+    // Chapter data
     const chapterNums = ['','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO'];
+    const chapterTitles = [
+      '',
+      'Observando los ejércitos en el campo de batalla de Kurukṣetra',
+      'Resumen del contenido del Gītā',
+      'Karma-yoga',
+      'Conocimiento trascendental',
+      'Karma-yoga — Acción con conciencia de Kṛṣṇa',
+      'Sāṅkhya-yoga',
+      'Conocimiento del Absoluto',
+      'Alcanzando al Supremo',
+      'El conocimiento más confidencial',
+      'La opulencia del Absoluto',
+      'La forma universal',
+      'Servicio devocional',
+      'La naturaleza, el disfrutador y la conciencia',
+      'Las tres modalidades de la naturaleza material',
+      'El yoga de la Persona Suprema',
+      'Las naturalezas divina y demoníaca',
+      'Las divisiones de la fe',
+      'Conclusión — La perfección de la renunciación'
+    ];
 
     let gitaText = null;
     let chapters = {};
+    let currentChapter = 1;
+
+    // Populate chapter dropdown
+    const chapterSelect = document.getElementById('chapter-select');
+    for (let i = 1; i <= 18; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = 'Cap ' + i + ' — ' + chapterTitles[i];
+      chapterSelect.appendChild(opt);
+    }
 
     async function loadGita() {
       if (gitaText) return;
       const res = await fetch('gita_es.txt');
       gitaText = await res.text();
-      // Parse into chapters
       const parts = gitaText.split(/^={50,}$/m);
       for (let i = 0; i < parts.length; i++) {
         const match = parts[i].match(/CAPÍTULO\s+(\S+)/);
@@ -870,30 +924,29 @@
           const word = match[1];
           const idx = chapterNums.indexOf(word);
           if (idx > 0 && i + 1 < parts.length) {
-            // Content is between this separator and the next CAPÍTULO
             let content = parts[i + 1];
-            // Remove the next chapter header marker if present
             const nextChapterIdx = content.indexOf('\nCAPÍTULO ');
-            if (nextChapterIdx > 0) {
-              content = content.substring(0, nextChapterIdx);
-            }
+            if (nextChapterIdx > 0) content = content.substring(0, nextChapterIdx);
             chapters[idx] = content;
           }
         }
       }
     }
 
-    function renderChapter(text) {
+    function renderChapter(text, ch) {
       let html = '';
       const lines = text.split('\n');
       let i = 0;
+      const verses = [];
       while (i < lines.length) {
         const l = lines[i].trim();
-        if (/^TEXTO\s+\d+/.test(l)) {
-          html += '<span class="verse-num">' + l + '</span>';
+        const verseMatch = l.match(/^TEXTO\s+(\d+)/);
+        if (verseMatch) {
+          const vn = verseMatch[1];
+          verses.push(vn);
+          html += '<span class="verse-num" id="v' + ch + '_' + vn + '">' + l + '</span>';
         } else if (l === 'TRADUCCIÓN') {
           html += '<span class="section-label">Traducción</span>';
-          // Collect translation paragraphs (usually italic)
           i++;
           let trans = '';
           while (i < lines.length) {
@@ -912,7 +965,7 @@
         }
         i++;
       }
-      return html;
+      return { html, verses };
     }
 
     // Font size control
@@ -921,41 +974,80 @@
       const body = document.getElementById('reader-body');
       if (body) body.style.fontSize = fontSize + 'rem';
     }
-
-    // Chapter click
-    document.querySelectorAll('.text-chapter-row').forEach(row => {
-      row.addEventListener('click', async () => {
-        const ch = parseInt(row.dataset.ch);
-        const name = row.querySelector('.name').textContent;
-        document.getElementById('reader-chapter-title').textContent = 'Capítulo ' + ch + ' — ' + name;
-        document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Cargando...</p>';
-        document.getElementById('reader-overlay').classList.add('active');
-        document.body.style.overflow = 'hidden';
-        applyFontSize();
-
-        await loadGita();
-        const content = chapters[ch];
-        if (content) {
-          document.getElementById('reader-body').innerHTML =
-            '<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.5rem">' +
-            '<button onclick="changeFontSize(-0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:0.85rem;cursor:pointer">A-</button>' +
-            '<button onclick="changeFontSize(0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:1.05rem;cursor:pointer">A+</button>' +
-            '</div>' +
-            '<div class="chapter-heading"><h2>Capítulo ' + ch + '</h2><h3>' + name + '</h3></div>' +
-            renderChapter(content);
-        } else {
-          document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Capítulo no disponible.</p>';
-        }
-        document.getElementById('reader-overlay').scrollTop = 0;
-        applyFontSize();
-      });
-    });
-
     function changeFontSize(delta) {
       fontSize = Math.max(0.8, Math.min(1.6, fontSize + delta));
       localStorage.setItem('gita-font-size', fontSize);
       applyFontSize();
     }
+
+    // Open chapter
+    async function openChapter(ch, scrollToVerse) {
+      currentChapter = ch;
+      chapterSelect.value = ch;
+      document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Cargando...</p>';
+      document.getElementById('reader-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      await loadGita();
+      const content = chapters[ch];
+      if (!content) {
+        document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Capítulo no disponible.</p>';
+        return;
+      }
+
+      const { html, verses } = renderChapter(content, ch);
+
+      // Update verse dropdown
+      const verseSelect = document.getElementById('verse-select');
+      verseSelect.innerHTML = '<option value="">Verso</option>';
+      verses.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = 'Texto ' + v;
+        verseSelect.appendChild(opt);
+      });
+
+      // Build prev/next buttons
+      const prevBtn = ch > 1 ? '<button class="reader-nav-btn" onclick="openChapter(' + (ch-1) + ')">&larr; Cap ' + (ch-1) + '</button>' : '<span></span>';
+      const nextBtn = ch < 18 ? '<button class="reader-nav-btn" onclick="openChapter(' + (ch+1) + ')">Cap ' + (ch+1) + ' &rarr;</button>' : '<span></span>';
+
+      document.getElementById('reader-body').innerHTML =
+        '<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.5rem">' +
+        '<button onclick="changeFontSize(-0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:0.85rem;cursor:pointer">A-</button>' +
+        '<button onclick="changeFontSize(0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:1.05rem;cursor:pointer">A+</button>' +
+        '</div>' +
+        '<div class="chapter-heading"><h2>Capítulo ' + ch + '</h2><h3>' + chapterTitles[ch] + '</h3></div>' +
+        html +
+        '<div class="reader-nav-btns">' + prevBtn + nextBtn + '</div>';
+
+      applyFontSize();
+
+      if (scrollToVerse) {
+        setTimeout(() => {
+          const el = document.getElementById('v' + ch + '_' + scrollToVerse);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      } else {
+        document.getElementById('reader-overlay').scrollTop = 0;
+      }
+    }
+
+    // Chapter list click
+    document.querySelectorAll('.text-chapter-row').forEach(row => {
+      row.addEventListener('click', () => openChapter(parseInt(row.dataset.ch)));
+    });
+
+    // Chapter dropdown change
+    chapterSelect.addEventListener('change', () => {
+      openChapter(parseInt(chapterSelect.value));
+    });
+
+    // Verse dropdown change
+    document.getElementById('verse-select').addEventListener('change', function() {
+      if (!this.value) return;
+      const el = document.getElementById('v' + currentChapter + '_' + this.value);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     // Back button
     document.getElementById('reader-back').addEventListener('click', () => {
