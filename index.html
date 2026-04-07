@@ -761,6 +761,7 @@
         btn.classList.add('active');
         document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
         document.getElementById('font-fab').classList.toggle('visible', btn.dataset.tab === 'texto' && currentChapter > 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
 
