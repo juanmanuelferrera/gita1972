@@ -17,6 +17,32 @@
       --text-dim: #8a8070;
       --text-muted: #5a5040;
       --radius: 10px;
+      --hero-bg: linear-gradient(160deg, #0d1117 0%, #111827 40%, #1a1040 100%);
+      --tab-bg: rgba(11,11,20,0.92);
+      --nav-bg: #111120;
+      --select-bg: #1a1a30;
+      --select-border: #f5c84230;
+      --shadow: rgba(0,0,0,0.5);
+      --translation-color: #d4b67a;
+    }
+    [data-theme="light"] {
+      --gold: #8b6914;
+      --gold-dim: #7a5c1a;
+      --gold-ghost: #8b691418;
+      --bg: #f5f0e8;
+      --surface: #ebe5d8;
+      --surface-hover: #e0d9cc;
+      --border: #d0c8b8;
+      --text: #2c2416;
+      --text-dim: #5a4e3a;
+      --text-muted: #8a7e6a;
+      --hero-bg: linear-gradient(160deg, #e8e0d0 0%, #f0e8d8 40%, #ede4d4 100%);
+      --tab-bg: rgba(240,232,216,0.95);
+      --nav-bg: #e8e0d0;
+      --select-bg: #f5f0e8;
+      --select-border: #8b691430;
+      --shadow: rgba(0,0,0,0.1);
+      --translation-color: #6b5520;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -27,9 +53,31 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Theme toggle */
+    .theme-toggle {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 5;
+    }
+    .theme-toggle::after { content: '☀️'; }
+    [data-theme="light"] .theme-toggle::after { content: '🌙'; }
+    .theme-toggle:hover { border-color: var(--gold-dim); }
+
     /* Hero */
     .hero {
-      background: linear-gradient(160deg, #0d1117 0%, #111827 40%, #1a1040 100%);
+      background: var(--hero-bg);
       text-align: center;
       padding: 4rem 1.5rem 2.5rem;
       border-bottom: 1px solid var(--border);
@@ -54,7 +102,7 @@
 
     /* Tab switcher — pill style */
     .tab-bar {
-      background: rgba(11,11,20,0.92);
+      background: var(--tab-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
@@ -67,7 +115,7 @@
     }
     .tab-pills {
       display: inline-flex;
-      background: #0f0f1e;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 4px;
@@ -135,7 +183,7 @@
 
     /* Featured audio */
     .featured-audio {
-      background: linear-gradient(135deg, var(--surface) 0%, #161630 100%);
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hover) 100%);
       border: 1px solid var(--gold-ghost);
       border-radius: 14px;
       padding: 2rem;
@@ -312,7 +360,7 @@
 
     /* Texto nav bar */
     .texto-nav {
-      background: #111120;
+      background: var(--nav-bg);
       border-bottom: 2px solid var(--gold-ghost);
       padding: 1rem 1.2rem;
       display: flex;
@@ -323,14 +371,14 @@
       position: sticky;
       top: 56px;
       z-index: 15;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 20px var(--shadow);
     }
 
     /* Text reader content */
     .text-reader { scroll-margin-top: 130px; }
     .verse-select {
-      background: #1a1a30;
-      border: 1px solid #f5c84230;
+      background: var(--select-bg);
+      border: 1px solid var(--select-border);
       border-radius: 10px;
       padding: 0.75rem 2.2rem 0.75rem 1rem;
       color: var(--gold);
@@ -436,7 +484,7 @@
       letter-spacing: 0.1em;
     }
     .text-reader .translation-text {
-      color: #d4b67a;
+      color: var(--translation-color);
       font-style: italic;
       margin-bottom: 0.8rem;
       line-height: 1.75;
@@ -497,7 +545,8 @@
 </head>
 <body>
 
-  <div class="hero">
+  <div class="hero" style="position:relative">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema"></button>
     <h1>Bhagavad-gītā Tal Como Es</h1>
     <h2>Traducido del original Macmillan 1972</h2>
     <p class="author">Su Divina Gracia A.C. Bhaktivedanta Swami Prabhupāda</p>
@@ -537,7 +586,7 @@
         <h2>Preliminares</h2>
       </div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:1rem">
-        <select class="verse-select" id="prelim-select" style="width:100%;max-width:400px;font-size:1rem;padding:0.75rem 2.2rem 0.75rem 1rem;background:#1a1a30;border:1px solid #f5c84230;border-radius:10px;font-weight:500">
+        <select class="verse-select" id="prelim-select" style="width:100%;max-width:400px;font-size:1rem;padding:0.75rem 2.2rem 0.75rem 1rem;border-radius:10px;font-weight:500">
           <option value="">Seleccionar...</option>
           <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3">Portada (0:36)</option>
           <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3">Prólogo (4:12)</option>
@@ -721,6 +770,21 @@
         document.getElementById('font-fab').classList.toggle('visible', btn.dataset.tab === 'texto' && currentChapter > 0);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
+    });
+
+    // Theme toggle
+    const savedTheme = localStorage.getItem('gita-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? '' : 'light';
+      if (next) {
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('gita-theme', next);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('gita-theme');
+      }
     });
 
     // Preliminares dropdown
