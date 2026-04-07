@@ -5,43 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bhagavad-gītā Tal Como Es — Original Macmillan 1972</title>
   <style>
+    :root {
+      --gold: #f5c842;
+      --gold-dim: #c4a265;
+      --gold-ghost: #f5c84218;
+      --bg: #0b0b14;
+      --surface: #13131f;
+      --surface-hover: #191930;
+      --border: #1f1f35;
+      --text: #e0d6c8;
+      --text-dim: #8a8070;
+      --text-muted: #5a5040;
+      --radius: 10px;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: #0f0f1a;
-      color: #e0d6c8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* Hero */
     .hero {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: linear-gradient(160deg, #0d1117 0%, #111827 40%, #1a1040 100%);
       text-align: center;
-      padding: 3rem 1rem 2rem;
-      border-bottom: 2px solid #f5c84233;
+      padding: 4rem 1.5rem 3rem;
+      border-bottom: 1px solid var(--border);
     }
     .hero h1 {
-      font-size: 2.5rem;
-      color: #f5c842;
-      margin-bottom: 0.3rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 2.6rem;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
     }
     .hero h2 {
-      font-size: 1.2rem;
-      font-weight: normal;
-      color: #c4a265;
-      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
     }
     .hero .author {
-      font-size: 0.95rem;
-      color: #a89880;
-      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-dim);
     }
 
-    /* Navigation */
+    /* Nav */
     nav {
-      background: #161625;
-      border-bottom: 1px solid #2a2a40;
-      padding: 0.8rem 1rem;
+      background: rgba(11,11,20,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
       display: flex;
       justify-content: center;
       gap: 2rem;
@@ -51,33 +68,75 @@
       z-index: 10;
     }
     nav a {
-      color: #c4a265;
+      color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       transition: color 0.2s;
     }
-    nav a:hover { color: #f5c842; }
+    nav a:hover { color: var(--gold); }
 
     /* Sections */
-    section {
-      max-width: 900px;
+    .container {
+      max-width: 860px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 1.5rem;
     }
-    section + section {
-      border-top: 1px solid #2a2a40;
+    .container + .container { border-top: 1px solid var(--border); }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
     }
-    .section-title {
-      font-size: 1.6rem;
-      color: #f5c842;
+    .section-header h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .section-header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Featured audio (gita completo) */
+    .featured-audio {
+      background: linear-gradient(135deg, var(--surface) 0%, #161630 100%);
+      border: 1px solid var(--gold-ghost);
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-audio::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at center, #f5c84208 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .featured-audio h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      position: relative;
+    }
+    .featured-audio .desc {
+      color: var(--text-dim);
+      font-size: 0.85rem;
       margin-bottom: 1.2rem;
-      text-align: center;
+      position: relative;
     }
-    .section-subtitle {
-      text-align: center;
-      color: #a89880;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
+    .featured-audio audio {
+      width: 100%;
+      max-width: 560px;
+      height: 44px;
+      border-radius: 8px;
+      position: relative;
     }
 
     /* Video */
@@ -86,9 +145,8 @@
       padding-bottom: 56.25%;
       height: 0;
       overflow: hidden;
-      border-radius: 8px;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-      margin-bottom: 1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
     }
     .video-wrapper iframe {
       position: absolute;
@@ -96,94 +154,158 @@
       width: 100%; height: 100%;
       border: none;
     }
-    .video-caption {
+
+    /* Audio track list */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .track {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr auto auto auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.2rem;
+      background: var(--surface);
+      transition: background 0.15s;
+      cursor: default;
+    }
+    .track:hover { background: var(--surface-hover); }
+    .track-num {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
       text-align: center;
-      color: #8a8070;
-      font-size: 0.9rem;
+    }
+    .track-info {
+      min-width: 0;
+    }
+    .track-title {
+      font-size: 0.95rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-duration {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .track audio {
+      width: 240px;
+      height: 36px;
     }
 
-    /* Chapters */
-    .chapters-grid {
+    /* Chapter grid */
+    .chapter-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
     }
-    .chapter-card {
-      background: #1a1a2e;
-      border: 1px solid #2a2a40;
-      border-radius: 6px;
-      padding: 1rem 1.2rem;
-      transition: border-color 0.2s, transform 0.2s;
+    .chapter {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
-    .chapter-card:hover {
-      border-color: #f5c84266;
-      transform: translateY(-1px);
+    .chapter:hover {
+      border-color: #f5c84233;
+      background: var(--surface-hover);
+    }
+    .chapter.available {
+      border-left: 3px solid var(--gold);
+    }
+    .chapter.soon {
+      opacity: 0.4;
     }
     .chapter-num {
-      color: #f5c842;
-      font-size: 0.85rem;
-      font-weight: bold;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold-dim);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
-    .chapter-title {
-      color: #e0d6c8;
+    .chapter-name {
+      font-family: Georgia, 'Times New Roman', serif;
       font-size: 1rem;
-      margin-top: 0.2rem;
+      color: var(--text);
+      line-height: 1.4;
     }
-    .chapter-title-es {
-      color: #8a8070;
-      font-size: 0.85rem;
-      font-style: italic;
+    .chapter-duration {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .download-link {
+      font-size: 0.78rem;
+      color: var(--gold-dim);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .download-link:hover { opacity: 1; }
+    .chapter audio {
+      width: 100%;
+      height: 36px;
+      margin-top: auto;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      width: fit-content;
+    }
+    .badge-audio {
+      background: #f5c84215;
+      color: var(--gold);
+      border: 1px solid #f5c84230;
+    }
+    .badge-soon {
+      background: #ffffff06;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
     }
 
     /* Footer */
     footer {
       text-align: center;
-      padding: 2.5rem 1rem;
-      border-top: 1px solid #2a2a40;
-      color: #5a5040;
-      font-size: 0.85rem;
+      padding: 3rem 1rem;
+      border-top: 1px solid var(--border);
     }
     footer .mantra {
-      color: #c4a265;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--gold-dim);
       font-style: italic;
-      margin-bottom: 0.5rem;
       font-size: 0.95rem;
+      margin-bottom: 0.5rem;
     }
-
-    /* Lang toggle */
-    .lang-toggle {
-      display: inline-flex;
-      gap: 0;
-      border: 1px solid #2a2a40;
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 1rem;
-    }
-    .lang-toggle button {
-      background: transparent;
-      color: #8a8070;
-      border: none;
-      padding: 0.4rem 1rem;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-    }
-    .lang-toggle button.active {
-      background: #f5c84222;
-      color: #f5c842;
-    }
-    .lang-toggle button:hover:not(.active) {
-      color: #c4a265;
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
     }
 
     @media (max-width: 600px) {
+      .hero { padding: 3rem 1rem 2rem; }
       .hero h1 { font-size: 1.8rem; }
-      .hero h2 { font-size: 1rem; }
-      section { padding: 2rem 1rem; }
-      .audio-card { flex-direction: column; text-align: center; }
+      .container { padding: 2rem 1rem; }
+      .chapter-grid { grid-template-columns: 1fr; }
+      .track { grid-template-columns: 2rem 1fr auto; gap: 0.6rem; }
+      .track audio { width: 100%; grid-column: 1 / -1; }
+      .track .download-link { grid-column: 1 / -1; text-align: center; }
+      .track-title { white-space: normal; }
     }
   </style>
 </head>
@@ -196,14 +318,225 @@
   </div>
 
   <nav>
+    <a href="#escuchar">Solo textos</a>
+    <a href="#preliminares">Preliminares</a>
+    <a href="#capitulos">Capítulos</a>
     <a href="#video">Video</a>
-    <a href="#chapters">Capítulos</a>
   </nav>
 
+  <!-- AUDIO COMPLETO -->
+  <div class="container" id="escuchar">
+    <div class="featured-audio">
+      <h3>Audiolibro completo en español (solo textos)</h3>
+      <p class="desc">Edición Original Macmillan 1972 — sin significados · 2h 25min</p>
+      <audio controls preload="none">
+        <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/gita_completo.mp3" type="audio/mpeg">
+      </audio>
+      <br>
+      <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/gita_completo.mp3?dl" download style="position:relative">Descargar MP3</a>
+    </div>
+  </div>
+
+  <!-- PRELIMINARES -->
+  <div class="container" id="preliminares">
+    <div class="section-header">
+      <h2>Preliminares</h2>
+      <p>Portada, prólogo, prefacio e introducción</p>
+    </div>
+    <div class="track-list">
+      <div class="track">
+        <span class="track-num">1</span>
+        <div class="track-info"><div class="track-title">Portada</div></div>
+        <span class="track-duration">0:36</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3?dl" download>↓</a>
+      </div>
+      <div class="track">
+        <span class="track-num">2</span>
+        <div class="track-info"><div class="track-title">Prólogo</div></div>
+        <span class="track-duration">4:12</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3?dl" download>↓</a>
+      </div>
+      <div class="track">
+        <span class="track-num">3</span>
+        <div class="track-info"><div class="track-title">Prefacio</div></div>
+        <span class="track-duration">8:38</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3?dl" download>↓</a>
+      </div>
+      <div class="track">
+        <span class="track-num">4</span>
+        <div class="track-info"><div class="track-title">Introducción — Parte 1</div></div>
+        <span class="track-duration">31:54</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3?dl" download>↓</a>
+      </div>
+      <div class="track">
+        <span class="track-num">5</span>
+        <div class="track-info"><div class="track-title">Introducción — Parte 2</div></div>
+        <span class="track-duration">48:47</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3?dl" download>↓</a>
+      </div>
+      <div class="track">
+        <span class="track-num">6</span>
+        <div class="track-info"><div class="track-title">Introducción — Parte 3</div></div>
+        <span class="track-duration">1:39</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3?dl" download>↓</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAPÍTULOS -->
+  <div class="container" id="capitulos">
+    <div class="section-header">
+      <h2>18 Capítulos</h2>
+      <p>Bhagavad-gītā Tal Como Es — Edición Original Macmillan 1972</p>
+    </div>
+
+    <div class="chapter-grid">
+
+      <div class="chapter available">
+        <span class="chapter-num">Capítulo 1</span>
+        <div class="chapter-name">Observando los ejércitos en el campo de batalla de Kurukṣetra</div>
+        <span class="chapter-duration">48:14</span>
+        <span class="badge badge-audio">Audio</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_01.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_01.mp3" download>Descargar MP3</a>
+      </div>
+
+      <div class="chapter available">
+        <span class="chapter-num">Capítulo 2</span>
+        <div class="chapter-name">Resumen del contenido del Gītā</div>
+        <span class="chapter-duration">1:02:36</span>
+        <span class="badge badge-audio">Audio (parte 1)</span>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_02_1.mp3" type="audio/mpeg">
+        </audio>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_02_1.mp3" download>Descargar MP3</a>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 3</span>
+        <div class="chapter-name">Karma-yoga</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 4</span>
+        <div class="chapter-name">Conocimiento trascendental</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 5</span>
+        <div class="chapter-name">Karma-yoga — Acción con conciencia de Kṛṣṇa</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 6</span>
+        <div class="chapter-name">Dhyāna-yoga</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 7</span>
+        <div class="chapter-name">Conocimiento del Absoluto</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 8</span>
+        <div class="chapter-name">Alcanzando al Supremo</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 9</span>
+        <div class="chapter-name">El conocimiento más confidencial</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 10</span>
+        <div class="chapter-name">La opulencia del Absoluto</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 11</span>
+        <div class="chapter-name">La forma universal</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 12</span>
+        <div class="chapter-name">Servicio devocional</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 13</span>
+        <div class="chapter-name">La naturaleza, el disfrutador y la conciencia</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 14</span>
+        <div class="chapter-name">Las tres modalidades de la naturaleza material</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 15</span>
+        <div class="chapter-name">El yoga de la Persona Suprema</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 16</span>
+        <div class="chapter-name">Las naturalezas divina y demoníaca</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 17</span>
+        <div class="chapter-name">Las divisiones de la fe</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+      <div class="chapter soon">
+        <span class="chapter-num">Capítulo 18</span>
+        <div class="chapter-name">Conclusión — La perfección de la renunciación</div>
+        <span class="badge badge-soon">Próximamente</span>
+      </div>
+
+    </div>
+  </div>
+
   <!-- VIDEO -->
-  <section id="video">
-    <h2 class="section-title">Bhagavad-gītā en Español</h2>
-    <p class="section-subtitle">Audiolibro completo — Edición Original Macmillan 1972</p>
+  <div class="container" id="video">
+    <div class="section-header">
+      <h2>Video</h2>
+      <p>Próximamente</p>
+    </div>
     <div class="video-wrapper">
       <iframe
         src="https://www.youtube.com/embed/aqn3lNs-4Ho"
@@ -212,107 +545,7 @@
         allowfullscreen>
       </iframe>
     </div>
-    <p class="video-caption">Escucha el Bhagavad-gītā completo en español</p>
-  </section>
-
-  <!-- CHAPTERS -->
-  <section id="chapters">
-    <h2 class="section-title">18 Capítulos</h2>
-    <p class="section-subtitle">Bhagavad-gītā As It Is — Original Macmillan 1972 Edition</p>
-
-    <div class="chapters-grid">
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 1</div>
-        <div class="chapter-title">Observing the Armies on the Battlefield of Kurukṣetra</div>
-        <div class="chapter-title-es">Observando los ejércitos en el campo de batalla de Kurukṣetra</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 2</div>
-        <div class="chapter-title">Contents of the Gītā Summarized</div>
-        <div class="chapter-title-es">Resumen del contenido del Gītā</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 3</div>
-        <div class="chapter-title">Karma-yoga</div>
-        <div class="chapter-title-es">Karma-yoga</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 4</div>
-        <div class="chapter-title">Transcendental Knowledge</div>
-        <div class="chapter-title-es">Conocimiento trascendental</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 5</div>
-        <div class="chapter-title">Karma-yoga — Action in Kṛṣṇa Consciousness</div>
-        <div class="chapter-title-es">Karma-yoga — Acción con conciencia de Kṛṣṇa</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 6</div>
-        <div class="chapter-title">Dhyāna-yoga</div>
-        <div class="chapter-title-es">Dhyāna-yoga</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 7</div>
-        <div class="chapter-title">Knowledge of the Absolute</div>
-        <div class="chapter-title-es">Conocimiento del Absoluto</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 8</div>
-        <div class="chapter-title">Attaining the Supreme</div>
-        <div class="chapter-title-es">Alcanzando al Supremo</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 9</div>
-        <div class="chapter-title">The Most Confidential Knowledge</div>
-        <div class="chapter-title-es">El conocimiento más confidencial</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 10</div>
-        <div class="chapter-title">The Opulence of the Absolute</div>
-        <div class="chapter-title-es">La opulencia del Absoluto</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 11</div>
-        <div class="chapter-title">The Universal Form</div>
-        <div class="chapter-title-es">La forma universal</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 12</div>
-        <div class="chapter-title">Devotional Service</div>
-        <div class="chapter-title-es">Servicio devocional</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 13</div>
-        <div class="chapter-title">Nature, the Enjoyer, and Consciousness</div>
-        <div class="chapter-title-es">La naturaleza, el disfrutador y la conciencia</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 14</div>
-        <div class="chapter-title">The Three Modes of Material Nature</div>
-        <div class="chapter-title-es">Las tres modalidades de la naturaleza material</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 15</div>
-        <div class="chapter-title">The Yoga of the Supreme Person</div>
-        <div class="chapter-title-es">El yoga de la Persona Suprema</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 16</div>
-        <div class="chapter-title">The Divine and Demoniac Natures</div>
-        <div class="chapter-title-es">Las naturalezas divina y demoníaca</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 17</div>
-        <div class="chapter-title">The Divisions of Faith</div>
-        <div class="chapter-title-es">Las divisiones de la fe</div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-num">Capítulo 18</div>
-        <div class="chapter-title">Conclusion — The Perfection of Renunciation</div>
-        <div class="chapter-title-es">Conclusión — La perfección de la renunciación</div>
-      </div>
-    </div>
-  </section>
+  </div>
 
   <footer>
     <p class="mantra">Hare Kṛṣṇa Hare Kṛṣṇa Kṛṣṇa Kṛṣṇa Hare Hare / Hare Rāma Hare Rāma Rāma Rāma Hare Hare</p>
