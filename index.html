@@ -327,63 +327,7 @@
       z-index: 15;
     }
 
-    /* Accordion */
-    .accordion {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .acc-item { background: var(--surface); }
-    .acc-header {
-      display: grid;
-      grid-template-columns: 2.8rem 1fr auto;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 1rem 1.2rem;
-      cursor: pointer;
-      transition: background 0.15s;
-      user-select: none;
-    }
-    .acc-header:hover { background: var(--surface-hover); }
-    .acc-header .num {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-variant-numeric: tabular-nums;
-      text-align: center;
-    }
-    .acc-header .name {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: 0.95rem;
-      line-height: 1.3;
-    }
-    .acc-arrow {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      transition: transform 0.25s;
-    }
-    .acc-item.open .acc-arrow { transform: rotate(180deg); }
-    .acc-item.open .acc-header { border-bottom: 1px solid var(--border); }
-
-    /* Accordion body */
-    .acc-body {
-      display: none;
-      padding: 0;
-    }
-    .acc-item.open .acc-body { display: block; }
-
-    /* Verse toolbar inside accordion */
-    .verse-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.8rem 1.2rem;
-      background: #0e0e1a;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
+    /* Text reader content */
     .verse-select {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -414,7 +358,7 @@
     .font-btn:hover { border-color: var(--gold-dim); color: var(--text); }
 
     /* Chapter content inside accordion */
-    .acc-content {
+    .text-reader {
       max-width: 720px;
       margin: 0 auto;
       padding: 1.5rem 1.2rem 2.5rem;
@@ -423,14 +367,14 @@
       line-height: 1.9;
       color: var(--text);
     }
-    .acc-content .verse-header {
+    .text-reader .verse-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin: 2.5rem 0 0.8rem;
       scroll-margin-top: 120px;
     }
-    .acc-content .verse-num {
+    .text-reader .verse-num {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       font-size: 0.8rem;
       font-weight: 600;
@@ -457,7 +401,7 @@
       transition: all 0.15s;
     }
     .verse-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-    .acc-content .section-label {
+    .text-reader .section-label {
       display: block;
       margin: 1.2rem 0 0.4rem;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -467,12 +411,12 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    .acc-content .translation-text {
+    .text-reader .translation-text {
       color: var(--gold-dim);
       font-style: italic;
       margin-bottom: 0.8rem;
     }
-    .acc-content p {
+    .text-reader p {
       margin-bottom: 1rem;
       text-align: justify;
     }
@@ -505,8 +449,8 @@
       .track audio { width: 100%; grid-column: 1 / -1; }
       .track .download-link { grid-column: 1 / -1; text-align: center; }
       .track-title { white-space: normal; }
-      .acc-content { padding: 1.2rem 1rem 2rem; font-size: 1rem; }
-      .acc-content p { text-align: left; }
+      .text-reader { padding: 1.2rem 1rem 2rem; font-size: 1rem; }
+      .text-reader p { text-align: left; }
       .acc-header { padding: 0.85rem 1rem; }
     }
   </style>
@@ -754,7 +698,9 @@
     </div>
 
     <div class="container">
-      <div class="accordion" id="accordion"></div>
+      <div class="text-reader" id="text-reader">
+        <p style="color:var(--text-dim);text-align:center;padding:3rem 0">Selecciona un capítulo para comenzar a leer</p>
+      </div>
     </div>
 
   </div><!-- /tab-texto -->
@@ -801,24 +747,6 @@
 
     let gitaText = null;
     let chapters = {};
-
-    // Build accordion
-    const accordion = document.getElementById('accordion');
-    for (let i = 1; i <= 18; i++) {
-      const item = document.createElement('div');
-      item.className = 'acc-item';
-      item.dataset.ch = i;
-      item.innerHTML =
-        '<div class="acc-header">' +
-          '<span class="num">' + i + '</span>' +
-          '<span class="name">' + chapterTitles[i] + '</span>' +
-          '<span class="acc-arrow">&#9660;</span>' +
-        '</div>' +
-        '<div class="acc-body">' +
-          '<div class="acc-content" id="acc-content-' + i + '"></div>' +
-        '</div>';
-      accordion.appendChild(item);
-    }
 
     // Populate chapter nav dropdown
     const navChapter = document.getElementById('nav-chapter');
@@ -898,7 +826,7 @@
     // Font size
     let fontSize = parseFloat(localStorage.getItem('gita-font-size') || '1.08');
     function applyFontSize() {
-      document.querySelectorAll('.acc-content').forEach(el => {
+      document.querySelectorAll('.text-reader').forEach(el => {
         el.style.fontSize = fontSize + 'rem';
       });
     }
@@ -908,67 +836,57 @@
       applyFontSize();
     }
 
-    const loadedChapters = {};
     const chapterVerses = {};
+    let currentChapter = 0;
 
-    // Open a chapter accordion
-    async function openAccChapter(ch) {
-      // Close all
-      accordion.querySelectorAll('.acc-item.open').forEach(el => el.classList.remove('open'));
-      const item = accordion.querySelector('[data-ch="' + ch + '"]');
-      if (!item) return;
-      item.classList.add('open');
+    // Load chapter into reader
+    async function openChapter(ch) {
+      if (currentChapter === ch && chapterVerses[ch]) return;
+      currentChapter = ch;
+      const reader = document.getElementById('text-reader');
+      reader.innerHTML = '<p style="color:var(--text-dim);text-align:center">Cargando...</p>';
 
-      // Load if needed
-      if (!loadedChapters[ch]) {
-        await loadGita();
-        const content = chapters[ch];
-        if (content) {
-          const { html, verses } = renderChapter(content, ch);
-          document.getElementById('acc-content-' + ch).innerHTML = html;
-          chapterVerses[ch] = verses;
-          loadedChapters[ch] = true;
-          applyFontSize();
-        }
+      await loadGita();
+      const content = chapters[ch];
+      if (!content) {
+        reader.innerHTML = '<p style="color:var(--text-dim);text-align:center">Capítulo no disponible.</p>';
+        return;
       }
+
+      const { html, verses } = renderChapter(content, ch);
+      chapterVerses[ch] = verses;
+      reader.innerHTML =
+        '<div style="text-align:center;margin-bottom:2rem">' +
+          '<h2 style="font-family:Georgia,serif;font-size:1.4rem;color:var(--gold);margin-bottom:0.3rem">Capítulo ' + ch + '</h2>' +
+          '<p style="font-family:Georgia,serif;font-size:1.05rem;color:var(--gold-dim)">' + chapterTitles[ch] + '</p>' +
+        '</div>' + html;
+      applyFontSize();
 
       // Update verse dropdown
       const navVerse = document.getElementById('nav-verse');
       navVerse.innerHTML = '<option value="">Verso...</option>';
-      (chapterVerses[ch] || []).forEach(v => {
+      verses.forEach(v => {
         const opt = document.createElement('option');
         opt.value = v;
         opt.textContent = 'Texto ' + v;
         navVerse.appendChild(opt);
       });
 
-      // Scroll to chapter header
-      setTimeout(() => {
-        item.querySelector('.acc-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 50);
+      // Scroll to top of reader
+      reader.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Chapter nav dropdown
+    // Chapter dropdown
     navChapter.addEventListener('change', () => {
       const ch = parseInt(navChapter.value);
-      if (ch) openAccChapter(ch);
+      if (ch) openChapter(ch);
     });
 
-    // Verse nav dropdown
+    // Verse dropdown
     document.getElementById('nav-verse').addEventListener('change', function() {
       if (!this.value || !navChapter.value) return;
       const el = document.getElementById('v' + navChapter.value + '_' + this.value);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    // Also allow clicking accordion headers to toggle
-    accordion.addEventListener('click', (e) => {
-      const header = e.target.closest('.acc-header');
-      if (!header) return;
-      const item = header.parentElement;
-      const ch = parseInt(item.dataset.ch);
-      navChapter.value = ch;
-      openAccChapter(ch);
     });
   </script>
 
