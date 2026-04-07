@@ -310,8 +310,24 @@
       border: 1px solid var(--border);
     }
 
-    /* Text chapter list */
-    .text-chapter-list {
+    /* Texto nav bar */
+    .texto-nav {
+      background: rgba(11,11,20,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      position: sticky;
+      top: 48px;
+      z-index: 15;
+    }
+
+    /* Accordion */
+    .accordion {
       display: flex;
       flex-direction: column;
       gap: 1px;
@@ -319,130 +335,101 @@
       border-radius: var(--radius);
       overflow: hidden;
     }
-    .text-chapter-row {
+    .acc-item { background: var(--surface); }
+    .acc-header {
       display: grid;
-      grid-template-columns: 3rem 1fr auto;
+      grid-template-columns: 2.8rem 1fr auto;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem 1.3rem;
-      background: var(--surface);
-      transition: background 0.15s;
+      gap: 0.8rem;
+      padding: 1rem 1.2rem;
       cursor: pointer;
+      transition: background 0.15s;
+      user-select: none;
     }
-    .text-chapter-row:hover { background: var(--surface-hover); }
-    .text-chapter-row .num {
+    .acc-header:hover { background: var(--surface-hover); }
+    .acc-header .num {
       color: var(--text-muted);
       font-size: 0.85rem;
       font-variant-numeric: tabular-nums;
       text-align: center;
     }
-    .text-chapter-row .name {
+    .acc-header .name {
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 0.95rem;
+      line-height: 1.3;
     }
-    .text-chapter-row .badge-text {
-      background: #4ade8012;
-      color: #4ade80;
-      border: 1px solid #4ade8025;
-      font-size: 0.65rem;
-      font-weight: 600;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .acc-arrow {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      transition: transform 0.25s;
     }
+    .acc-item.open .acc-arrow { transform: rotate(180deg); }
+    .acc-item.open .acc-header { border-bottom: 1px solid var(--border); }
 
-    /* Reader view */
-    .reader-overlay {
+    /* Accordion body */
+    .acc-body {
       display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: var(--bg);
-      overflow-y: auto;
+      padding: 0;
     }
-    .reader-overlay.active { display: block; }
-    .reader-bar {
-      background: rgba(11,11,20,0.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-      padding: 0.7rem 1.5rem;
+    .acc-item.open .acc-body { display: block; }
+
+    /* Verse toolbar inside accordion */
+    .verse-toolbar {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 101;
+      gap: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      background: #0e0e1a;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
     }
-    .reader-back {
+    .verse-select {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.45rem 0.9rem;
-      color: var(--text-dim);
-      font-family: inherit;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .reader-back:hover { border-color: var(--gold-dim); color: var(--text); }
-    .reader-select {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.45rem 0.6rem;
+      padding: 0.4rem 1.8rem 0.4rem 0.6rem;
       color: var(--gold);
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       -webkit-appearance: none;
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c4a265'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 0.6rem center;
-      padding-right: 1.8rem;
-      min-width: 0;
+      background-position: right 0.5rem center;
     }
-    .reader-select:focus { border-color: var(--gold-dim); outline: none; }
-    .reader-select option {
-      background: var(--surface);
-      color: var(--text);
-    }
-    .reader-nav-btns {
-      display: flex;
-      justify-content: space-between;
-      padding: 2rem 0;
-      margin-top: 2rem;
-      border-top: 1px solid var(--border);
-    }
-    .reader-nav-btn {
+    .verse-select:focus { border-color: var(--gold-dim); outline: none; }
+    .verse-select option { background: var(--surface); color: var(--text); }
+    .font-btn {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.6rem 1.2rem;
-      color: var(--gold-dim);
+      border-radius: 6px;
+      padding: 0.3rem 0.6rem;
+      color: var(--text-dim);
       font-family: inherit;
-      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
-    .reader-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-    .reader-nav-btn:disabled { opacity: 0.25; pointer-events: none; }
-    .reader-body {
+    .font-btn:hover { border-color: var(--gold-dim); color: var(--text); }
+
+    /* Chapter content inside accordion */
+    .acc-content {
       max-width: 720px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
+      padding: 1.5rem 1.2rem 2.5rem;
       font-family: Georgia, 'Times New Roman', serif;
       font-size: 1.08rem;
       line-height: 1.9;
       color: var(--text);
     }
-    .reader-body .verse-num {
-      display: block;
+    .acc-content .verse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin: 2.5rem 0 0.8rem;
+      scroll-margin-top: 120px;
+    }
+    .acc-content .verse-num {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       font-size: 0.8rem;
       font-weight: 600;
@@ -450,7 +437,26 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-    .reader-body .section-label {
+    .verse-nav {
+      display: flex;
+      gap: 0.3rem;
+    }
+    .verse-nav-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .verse-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .acc-content .section-label {
       display: block;
       margin: 1.2rem 0 0.4rem;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -460,28 +466,14 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
-    .reader-body .translation-text {
+    .acc-content .translation-text {
       color: var(--gold-dim);
       font-style: italic;
       margin-bottom: 0.8rem;
     }
-    .reader-body p {
+    .acc-content p {
       margin-bottom: 1rem;
       text-align: justify;
-    }
-    .reader-body .chapter-heading {
-      text-align: center;
-      margin: 1rem 0 2.5rem;
-    }
-    .reader-body .chapter-heading h2 {
-      font-size: 1.5rem;
-      color: var(--gold);
-      margin-bottom: 0.3rem;
-    }
-    .reader-body .chapter-heading h3 {
-      font-size: 1.1rem;
-      color: var(--gold-dim);
-      font-weight: 400;
     }
 
     /* Footer */
@@ -512,9 +504,9 @@
       .track audio { width: 100%; grid-column: 1 / -1; }
       .track .download-link { grid-column: 1 / -1; text-align: center; }
       .track-title { white-space: normal; }
-      .reader-body { padding: 1.5rem 1rem 3rem; font-size: 1rem; }
-      .reader-body p { text-align: left; }
-      .reader-chapter-title { font-size: 0.85rem; }
+      .acc-content { padding: 1.2rem 1rem 2rem; font-size: 1rem; }
+      .acc-content p { text-align: left; }
+      .acc-header { padding: 0.85rem 1rem; }
     }
   </style>
 </head>
@@ -749,116 +741,22 @@
   <!-- ==================== TEXTO TAB ==================== -->
   <div class="tab-panel" id="tab-texto">
 
+    <div class="texto-nav" id="texto-nav">
+      <select class="verse-select" id="nav-chapter">
+        <option value="">Capítulo...</option>
+      </select>
+      <select class="verse-select" id="nav-verse">
+        <option value="">Verso...</option>
+      </select>
+      <button class="font-btn" onclick="changeFontSize(-0.08)">A-</button>
+      <button class="font-btn" onclick="changeFontSize(0.08)" style="font-size:1rem">A+</button>
+    </div>
+
     <div class="container">
-      <div class="section-header">
-        <h2>18 Capítulos</h2>
-        <p>Traducción completa al español — Edición Original Macmillan 1972</p>
-      </div>
-      <div class="text-chapter-list" id="chapter-list">
-        <div class="text-chapter-row" data-ch="1">
-          <span class="num">1</span>
-          <span class="name">Observando los ejércitos en el campo de batalla de Kurukṣetra</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="2">
-          <span class="num">2</span>
-          <span class="name">Resumen del contenido del Gītā</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="3">
-          <span class="num">3</span>
-          <span class="name">Karma-yoga</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="4">
-          <span class="num">4</span>
-          <span class="name">Conocimiento trascendental</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="5">
-          <span class="num">5</span>
-          <span class="name">Karma-yoga — Acción con conciencia de Kṛṣṇa</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="6">
-          <span class="num">6</span>
-          <span class="name">Sāṅkhya-yoga</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="7">
-          <span class="num">7</span>
-          <span class="name">Conocimiento del Absoluto</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="8">
-          <span class="num">8</span>
-          <span class="name">Alcanzando al Supremo</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="9">
-          <span class="num">9</span>
-          <span class="name">El conocimiento más confidencial</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="10">
-          <span class="num">10</span>
-          <span class="name">La opulencia del Absoluto</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="11">
-          <span class="num">11</span>
-          <span class="name">La forma universal</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="12">
-          <span class="num">12</span>
-          <span class="name">Servicio devocional</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="13">
-          <span class="num">13</span>
-          <span class="name">La naturaleza, el disfrutador y la conciencia</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="14">
-          <span class="num">14</span>
-          <span class="name">Las tres modalidades de la naturaleza material</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="15">
-          <span class="num">15</span>
-          <span class="name">El yoga de la Persona Suprema</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="16">
-          <span class="num">16</span>
-          <span class="name">Las naturalezas divina y demoníaca</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="17">
-          <span class="num">17</span>
-          <span class="name">Las divisiones de la fe</span>
-          <span class="badge-text">Leer</span>
-        </div>
-        <div class="text-chapter-row" data-ch="18">
-          <span class="num">18</span>
-          <span class="name">Conclusión — La perfección de la renunciación</span>
-          <span class="badge-text">Leer</span>
-        </div>
-      </div>
+      <div class="accordion" id="accordion"></div>
     </div>
 
   </div><!-- /tab-texto -->
-
-  <!-- READER OVERLAY -->
-  <div class="reader-overlay" id="reader-overlay">
-    <div class="reader-bar">
-      <button class="reader-back" id="reader-back">&larr;</button>
-      <select class="reader-select" id="chapter-select"></select>
-      <select class="reader-select" id="verse-select"><option value="">Verso</option></select>
-    </div>
-    <div class="reader-body" id="reader-body"></div>
-  </div>
 
   <footer>
     <p class="mantra">Hare Kṛṣṇa Hare Kṛṣṇa Kṛṣṇa Kṛṣṇa Hare Hare / Hare Rāma Hare Rāma Rāma Rāma Hare Hare</p>
@@ -902,15 +800,32 @@
 
     let gitaText = null;
     let chapters = {};
-    let currentChapter = 1;
 
-    // Populate chapter dropdown
-    const chapterSelect = document.getElementById('chapter-select');
+    // Build accordion
+    const accordion = document.getElementById('accordion');
+    for (let i = 1; i <= 18; i++) {
+      const item = document.createElement('div');
+      item.className = 'acc-item';
+      item.dataset.ch = i;
+      item.innerHTML =
+        '<div class="acc-header">' +
+          '<span class="num">' + i + '</span>' +
+          '<span class="name">' + chapterTitles[i] + '</span>' +
+          '<span class="acc-arrow">&#9660;</span>' +
+        '</div>' +
+        '<div class="acc-body">' +
+          '<div class="acc-content" id="acc-content-' + i + '"></div>' +
+        '</div>';
+      accordion.appendChild(item);
+    }
+
+    // Populate chapter nav dropdown
+    const navChapter = document.getElementById('nav-chapter');
     for (let i = 1; i <= 18; i++) {
       const opt = document.createElement('option');
       opt.value = i;
       opt.textContent = 'Cap ' + i + ' — ' + chapterTitles[i];
-      chapterSelect.appendChild(opt);
+      navChapter.appendChild(opt);
     }
 
     async function loadGita() {
@@ -938,13 +853,24 @@
       const lines = text.split('\n');
       let i = 0;
       const verses = [];
+      // First pass: collect verse numbers
+      for (const line of lines) {
+        const m = line.trim().match(/^TEXTO\s+(\d+)/);
+        if (m) verses.push(m[1]);
+      }
+      // Second pass: render
+      let verseIdx = -1;
       while (i < lines.length) {
         const l = lines[i].trim();
         const verseMatch = l.match(/^TEXTO\s+(\d+)/);
         if (verseMatch) {
           const vn = verseMatch[1];
-          verses.push(vn);
-          html += '<span class="verse-num" id="v' + ch + '_' + vn + '">' + l + '</span>';
+          verseIdx = verses.indexOf(vn);
+          const prevId = verseIdx > 0 ? 'v' + ch + '_' + verses[verseIdx - 1] : '';
+          const nextId = verseIdx < verses.length - 1 ? 'v' + ch + '_' + verses[verseIdx + 1] : '';
+          const prevBtn = prevId ? '<button class="verse-nav-btn" onclick="document.getElementById(\'' + prevId + '\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&lsaquo;</button>' : '';
+          const nextBtn = nextId ? '<button class="verse-nav-btn" onclick="document.getElementById(\'' + nextId + '\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&rsaquo;</button>' : '';
+          html += '<div class="verse-header" id="v' + ch + '_' + vn + '"><span class="verse-num">' + l + '</span><div class="verse-nav">' + prevBtn + nextBtn + '</div></div>';
         } else if (l === 'TRADUCCIÓN') {
           html += '<span class="section-label">Traducción</span>';
           i++;
@@ -968,11 +894,12 @@
       return { html, verses };
     }
 
-    // Font size control
+    // Font size
     let fontSize = parseFloat(localStorage.getItem('gita-font-size') || '1.08');
     function applyFontSize() {
-      const body = document.getElementById('reader-body');
-      if (body) body.style.fontSize = fontSize + 'rem';
+      document.querySelectorAll('.acc-content').forEach(el => {
+        el.style.fontSize = fontSize + 'rem';
+      });
     }
     function changeFontSize(delta) {
       fontSize = Math.max(0.8, Math.min(1.6, fontSize + delta));
@@ -980,79 +907,67 @@
       applyFontSize();
     }
 
-    // Open chapter
-    async function openChapter(ch, scrollToVerse) {
-      currentChapter = ch;
-      chapterSelect.value = ch;
-      document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Cargando...</p>';
-      document.getElementById('reader-overlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
+    const loadedChapters = {};
+    const chapterVerses = {};
 
-      await loadGita();
-      const content = chapters[ch];
-      if (!content) {
-        document.getElementById('reader-body').innerHTML = '<p style="color:var(--text-dim);text-align:center">Capítulo no disponible.</p>';
-        return;
+    // Open a chapter accordion
+    async function openAccChapter(ch) {
+      // Close all
+      accordion.querySelectorAll('.acc-item.open').forEach(el => el.classList.remove('open'));
+      const item = accordion.querySelector('[data-ch="' + ch + '"]');
+      if (!item) return;
+      item.classList.add('open');
+
+      // Load if needed
+      if (!loadedChapters[ch]) {
+        await loadGita();
+        const content = chapters[ch];
+        if (content) {
+          const { html, verses } = renderChapter(content, ch);
+          document.getElementById('acc-content-' + ch).innerHTML = html;
+          chapterVerses[ch] = verses;
+          loadedChapters[ch] = true;
+          applyFontSize();
+        }
       }
 
-      const { html, verses } = renderChapter(content, ch);
-
       // Update verse dropdown
-      const verseSelect = document.getElementById('verse-select');
-      verseSelect.innerHTML = '<option value="">Verso</option>';
-      verses.forEach(v => {
+      const navVerse = document.getElementById('nav-verse');
+      navVerse.innerHTML = '<option value="">Verso...</option>';
+      (chapterVerses[ch] || []).forEach(v => {
         const opt = document.createElement('option');
         opt.value = v;
         opt.textContent = 'Texto ' + v;
-        verseSelect.appendChild(opt);
+        navVerse.appendChild(opt);
       });
 
-      // Build prev/next buttons
-      const prevBtn = ch > 1 ? '<button class="reader-nav-btn" onclick="openChapter(' + (ch-1) + ')">&larr; Cap ' + (ch-1) + '</button>' : '<span></span>';
-      const nextBtn = ch < 18 ? '<button class="reader-nav-btn" onclick="openChapter(' + (ch+1) + ')">Cap ' + (ch+1) + ' &rarr;</button>' : '<span></span>';
-
-      document.getElementById('reader-body').innerHTML =
-        '<div style="display:flex;justify-content:center;gap:0.5rem;margin-bottom:1.5rem">' +
-        '<button onclick="changeFontSize(-0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:0.85rem;cursor:pointer">A-</button>' +
-        '<button onclick="changeFontSize(0.08)" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.3rem 0.7rem;color:var(--text-dim);font-size:1.05rem;cursor:pointer">A+</button>' +
-        '</div>' +
-        '<div class="chapter-heading"><h2>Capítulo ' + ch + '</h2><h3>' + chapterTitles[ch] + '</h3></div>' +
-        html +
-        '<div class="reader-nav-btns">' + prevBtn + nextBtn + '</div>';
-
-      applyFontSize();
-
-      if (scrollToVerse) {
-        setTimeout(() => {
-          const el = document.getElementById('v' + ch + '_' + scrollToVerse);
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      } else {
-        document.getElementById('reader-overlay').scrollTop = 0;
-      }
+      // Scroll to chapter header
+      setTimeout(() => {
+        item.querySelector('.acc-header').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     }
 
-    // Chapter list click
-    document.querySelectorAll('.text-chapter-row').forEach(row => {
-      row.addEventListener('click', () => openChapter(parseInt(row.dataset.ch)));
+    // Chapter nav dropdown
+    navChapter.addEventListener('change', () => {
+      const ch = parseInt(navChapter.value);
+      if (ch) openAccChapter(ch);
     });
 
-    // Chapter dropdown change
-    chapterSelect.addEventListener('change', () => {
-      openChapter(parseInt(chapterSelect.value));
-    });
-
-    // Verse dropdown change
-    document.getElementById('verse-select').addEventListener('change', function() {
-      if (!this.value) return;
-      const el = document.getElementById('v' + currentChapter + '_' + this.value);
+    // Verse nav dropdown
+    document.getElementById('nav-verse').addEventListener('change', function() {
+      if (!this.value || !navChapter.value) return;
+      const el = document.getElementById('v' + navChapter.value + '_' + this.value);
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // Back button
-    document.getElementById('reader-back').addEventListener('click', () => {
-      document.getElementById('reader-overlay').classList.remove('active');
-      document.body.style.overflow = '';
+    // Also allow clicking accordion headers to toggle
+    accordion.addEventListener('click', (e) => {
+      const header = e.target.closest('.acc-header');
+      if (!header) return;
+      const item = header.parentElement;
+      const ch = parseInt(item.dataset.ch);
+      navChapter.value = ch;
+      openAccChapter(ch);
     });
   </script>
 
