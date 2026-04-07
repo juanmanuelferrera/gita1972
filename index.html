@@ -796,7 +796,8 @@
       audio.src = this.value;
       dl.href = this.value + '?dl';
       player.style.display = 'block';
-      audio.play();
+      audio.load();
+      audio.play().catch(function(){});
     });
 
     // Chapter data
