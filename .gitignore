@@ -1,2 +1,7 @@
 
 .DS_Store
+
+# --- audio: pesa cientos de MB y GitHub corta en 100MB por fichero; va en R2 ---
+audio/*.mp3
+# caché local de wrangler
+.wrangler/
