@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhagavad-gītā Tal Como Es — Original Macmillan 1972</title>
+  <style>
+    :root {
+      --gold: #f5c842;
+      --gold-dim: #c4a265;
+      --gold-ghost: #f5c84218;
+      --bg: #0b0b14;
+      --surface: #13131f;
+      --surface-hover: #191930;
+      --border: #1f1f35;
+      --text: #e0d6c8;
+      --text-dim: #8a8070;
+      --text-muted: #5a5040;
+      --radius: 10px;
+      --hero-bg: linear-gradient(160deg, #0d1117 0%, #111827 40%, #1a1040 100%);
+      --tab-bg: rgba(11,11,20,0.92);
+      --nav-bg: #111120;
+      --select-bg: #1a1a30;
+      --select-border: #f5c84230;
+      --shadow: rgba(0,0,0,0.5);
+      --translation-color: #d4b67a;
+    }
+    [data-theme="light"] {
+      --gold: #8b6914;
+      --gold-dim: #7a5c1a;
+      --gold-ghost: #8b691418;
+      --bg: #f5f0e8;
+      --surface: #ebe5d8;
+      --surface-hover: #e0d9cc;
+      --border: #d0c8b8;
+      --text: #2c2416;
+      --text-dim: #5a4e3a;
+      --text-muted: #8a7e6a;
+      --hero-bg: linear-gradient(160deg, #e8e0d0 0%, #f0e8d8 40%, #ede4d4 100%);
+      --tab-bg: rgba(240,232,216,0.95);
+      --nav-bg: #e8e0d0;
+      --select-bg: #f5f0e8;
+      --select-border: #8b691430;
+      --shadow: rgba(0,0,0,0.1);
+      --translation-color: #6b5520;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      z-index: 5;
+    }
+    .theme-toggle::after { content: '☀️'; }
+    [data-theme="light"] .theme-toggle::after { content: '🌙'; }
+    .theme-toggle:hover { border-color: var(--gold-dim); }
+
+    /* Hero */
+    .hero {
+      background: var(--hero-bg);
+      text-align: center;
+      padding: 4rem 1.5rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 2.6rem;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .hero .author {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    /* Tab switcher — pill style */
+    .tab-bar {
+      background: var(--tab-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .tab-pills {
+      display: inline-flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .tab-pill {
+      padding: 0.5rem 1.6rem;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      letter-spacing: 0.02em;
+    }
+    .tab-pill:hover {
+      color: var(--text);
+    }
+    .tab-pill.active {
+      background: linear-gradient(135deg, #f5c84220, #f5c84210);
+      color: var(--gold);
+      box-shadow: 0 1px 8px #f5c84215;
+    }
+    .tab-pill .tab-icon {
+      margin-right: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    /* Tab panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Sections */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .container + .container { border-top: 1px solid var(--border); }
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .section-header h2 {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+    }
+    .section-header p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Featured audio */
+    .featured-audio {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-hover) 100%);
+      border: 1px solid var(--gold-ghost);
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-audio::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at center, #f5c84208 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .featured-audio h3 {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      position: relative;
+    }
+    .featured-audio .desc {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .featured-audio audio {
+      width: 100%;
+      max-width: 560px;
+      height: 44px;
+      border-radius: 8px;
+      position: relative;
+    }
+
+    /* Video */
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* Audio track list */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .track {
+      display: grid;
+      grid-template-columns: 2.5rem 1fr auto auto auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.2rem;
+      background: var(--surface);
+      transition: background 0.15s;
+      cursor: default;
+    }
+    .track:hover { background: var(--surface-hover); }
+    .track-num {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+    .track-info { min-width: 0; }
+    .track-title {
+      font-size: 0.95rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-duration {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .track audio {
+      width: 240px;
+      height: 36px;
+    }
+
+    /* Chapter grid */
+    .chapter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+    .chapter {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .chapter:hover {
+      border-color: #f5c84233;
+      background: var(--surface-hover);
+    }
+    .chapter.available { border-left: 3px solid var(--gold); }
+    .chapter.soon { opacity: 0.4; }
+    .chapter-num {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .chapter-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .chapter-duration {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .chapter audio {
+      width: 100%;
+      height: 36px;
+      margin-top: auto;
+    }
+
+    /* Download link */
+    .download-link {
+      font-size: 0.78rem;
+      color: var(--gold-dim);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .download-link:hover { opacity: 1; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      width: fit-content;
+    }
+    .badge-audio {
+      background: #f5c84215;
+      color: var(--gold);
+      border: 1px solid #f5c84230;
+    }
+    .badge-soon {
+      background: #ffffff06;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* Texto nav bar */
+    .texto-nav {
+      background: var(--nav-bg);
+      border-bottom: 2px solid var(--gold-ghost);
+      padding: 1rem 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 56px;
+      z-index: 15;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+
+    /* Text reader content */
+    .text-reader { scroll-margin-top: 130px; }
+    .verse-select {
+      background: var(--select-bg);
+      border: 1px solid var(--select-border);
+      border-radius: 10px;
+      padding: 0.75rem 2.2rem 0.75rem 1rem;
+      color: var(--gold);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c4a265'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+    }
+    .verse-select:focus { border-color: var(--gold-dim); outline: none; }
+    .verse-select option { background: var(--surface); color: var(--text); }
+    /* Font size FAB */
+    .font-fab {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 50;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .font-fab.visible { display: flex; }
+    .font-fab-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    .font-fab-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .font-fab-btn:last-child { font-size: 0.95rem; }
+
+    /* Chapter content */
+    .text-reader {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.5rem 1.2rem 2.5rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(1rem, 2.5vw, 1.12rem);
+      line-height: 1.85;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      word-break: break-word;
+    }
+    .text-reader .verse-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 2.5rem 0 0.8rem;
+      scroll-margin-top: 160px;
+    }
+    .text-reader .verse-num {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .verse-nav {
+      display: flex;
+      gap: 0.3rem;
+    }
+    .verse-nav-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .verse-nav-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .text-reader .section-label {
+      display: block;
+      margin: 1.2rem 0 0.4rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .text-reader .translation-text {
+      color: var(--translation-color);
+      font-style: italic;
+      margin-bottom: 0.8rem;
+      line-height: 1.75;
+    }
+    .text-reader p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+    .text-reader .significado-text {
+      text-indent: 1.5em;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    footer .mantra {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--gold-dim);
+      font-style: italic;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1rem 2rem; }
+      .hero h1 { font-size: 1.8rem; }
+      .container { padding: 2rem 1rem; }
+      .chapter-grid { grid-template-columns: 1fr; }
+      .tab-pill { padding: 0.45rem 1.2rem; font-size: 0.82rem; }
+      .track { grid-template-columns: 2rem 1fr auto; gap: 0.6rem; }
+      .track audio { width: 100%; grid-column: 1 / -1; }
+      .track .download-link { grid-column: 1 / -1; text-align: center; }
+      .track-title { white-space: normal; }
+      .text-reader {
+        padding: 1.2rem 1rem 2rem;
+        font-size: clamp(0.95rem, 4vw, 1.05rem);
+        line-height: 1.75;
+        letter-spacing: 0.015em;
+      }
+      .text-reader p { text-align: left; }
+      .text-reader .translation-text { line-height: 1.7; }
+      .texto-nav { margin-top: 0.5rem; gap: 0.4rem; padding: 0.7rem 0.5rem; }
+      .texto-nav .verse-select { font-size: 0.95rem; padding: 0.7rem 2rem 0.7rem 0.8rem; }
+      .texto-nav .verse-select:first-child { flex: 1; min-width: 0; }
+      .font-fab { bottom: 1rem; right: 1rem; }
+      .font-fab-btn { width: 2.2rem; height: 2.2rem; font-size: 0.78rem; }
+      .font-fab-btn:last-child { font-size: 0.88rem; }
+      .acc-header { padding: 0.85rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero" style="position:relative">
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema"></button>
+    <h1>Bhagavad-gītā Tal Como Es</h1>
+    <h2>Traducido del original Macmillan 1972</h2>
+    <p class="author">Su Divina Gracia A.C. Bhaktivedanta Swami Prabhupāda</p>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <div class="tab-pills">
+      <button class="tab-pill active" data-tab="audio">
+        <span class="tab-icon">&#9835;</span>Audio
+      </button>
+      <button class="tab-pill" data-tab="texto">
+        <span class="tab-icon">&#9998;</span>Texto
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== AUDIO TAB ==================== -->
+  <div class="tab-panel active" id="tab-audio">
+
+    <!-- Audio completo -->
+    <div class="container">
+      <div class="featured-audio">
+        <h3>Audiolibro completo en español (solo textos)</h3>
+        <p class="desc">Edición Original Macmillan 1972 — sin significados · 2h 25min</p>
+        <audio controls preload="none">
+          <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/gita_completo.mp3" type="audio/mpeg">
+        </audio>
+        <br>
+        <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/gita_completo.mp3?dl" download style="position:relative">Descargar MP3</a>
+      </div>
+    </div>
+
+    <!-- Preliminares -->
+    <div class="container">
+      <div class="section-header">
+        <h2>Preliminares</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1rem">
+        <select class="verse-select" id="prelim-select" style="width:100%;max-width:400px;font-size:1rem;padding:0.75rem 2.2rem 0.75rem 1rem;border-radius:10px;font-weight:500">
+          <option value="">Seleccionar...</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/00_portada.mp3">Portada (0:36)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/01_prologo.mp3">Prólogo (4:12)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/02_prefacio.mp3">Prefacio (8:38)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/03_introduccion_1.mp3">Introducción — Parte 1 (31:54)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/04_introduccion_2.mp3">Introducción — Parte 2 (48:47)</option>
+          <option value="https://gita1972-audio.joanmanelferrera-400.workers.dev/05_introduccion_3.mp3">Introducción — Parte 3 (1:39)</option>
+        </select>
+        <div id="prelim-player" style="width:100%;max-width:500px;display:none;text-align:center">
+          <audio controls id="prelim-audio" style="width:100%;height:44px" preload="metadata">
+            <source id="prelim-source" src="" type="audio/mpeg">
+          </audio>
+          <a class="download-link" id="prelim-download" href="#" download style="display:inline-block;margin-top:0.5rem">Descargar MP3</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capítulos audio -->
+    <div class="container">
+      <div class="section-header">
+        <h2>18 Capítulos</h2>
+        <p>Bhagavad-gītā Tal Como Es — Edición Original Macmillan 1972</p>
+      </div>
+      <div class="chapter-grid">
+        <div class="chapter available">
+          <span class="chapter-num">Capítulo 1</span>
+          <div class="chapter-name">Observando los ejércitos en el campo de batalla de Kurukṣetra</div>
+          <span class="chapter-duration">48:14</span>
+          <span class="badge badge-audio">Audio</span>
+          <audio controls preload="none">
+            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_01.mp3" type="audio/mpeg">
+          </audio>
+          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_01.mp3?dl" download>Descargar MP3</a>
+        </div>
+        <div class="chapter available">
+          <span class="chapter-num">Capítulo 2</span>
+          <div class="chapter-name">Resumen del contenido del Gītā</div>
+          <span class="chapter-duration">1:02:36</span>
+          <span class="badge badge-audio">Audio (parte 1)</span>
+          <audio controls preload="none">
+            <source src="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_02_1.mp3" type="audio/mpeg">
+          </audio>
+          <a class="download-link" href="https://gita1972-audio.joanmanelferrera-400.workers.dev/cap_02_1.mp3?dl" download>Descargar MP3</a>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 3</span>
+          <div class="chapter-name">Karma-yoga</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 4</span>
+          <div class="chapter-name">Conocimiento trascendental</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 5</span>
+          <div class="chapter-name">Karma-yoga — Acción con conciencia de Kṛṣṇa</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 6</span>
+          <div class="chapter-name">Dhyāna-yoga</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 7</span>
+          <div class="chapter-name">Conocimiento del Absoluto</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 8</span>
+          <div class="chapter-name">Alcanzando al Supremo</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 9</span>
+          <div class="chapter-name">El conocimiento más confidencial</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 10</span>
+          <div class="chapter-name">La opulencia del Absoluto</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 11</span>
+          <div class="chapter-name">La forma universal</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 12</span>
+          <div class="chapter-name">Servicio devocional</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 13</span>
+          <div class="chapter-name">La naturaleza, el disfrutador y la conciencia</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 14</span>
+          <div class="chapter-name">Las tres modalidades de la naturaleza material</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 15</span>
+          <div class="chapter-name">El yoga de la Persona Suprema</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 16</span>
+          <div class="chapter-name">Las naturalezas divina y demoníaca</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 17</span>
+          <div class="chapter-name">Las divisiones de la fe</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+        <div class="chapter soon">
+          <span class="chapter-num">Capítulo 18</span>
+          <div class="chapter-name">Conclusión — La perfección de la renunciación</div>
+          <span class="badge badge-soon">Próximamente</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video -->
+    <div class="container">
+      <div class="section-header">
+        <h2>Video</h2>
+        <p>Audiolibro en YouTube (solo textos)</p>
+      </div>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/aqn3lNs-4Ho"
+          title="Bhagavad-gītā Tal Como Es — Audiolibro en Español"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+  </div><!-- /tab-audio -->
+
+  <!-- ==================== TEXTO TAB ==================== -->
+  <div class="tab-panel" id="tab-texto">
+
+    <div class="texto-nav" id="texto-nav">
+      <select class="verse-select" id="nav-chapter">
+        <option value="">Capítulo...</option>
+      </select>
+      <select class="verse-select" id="nav-verse">
+        <option value="">Verso...</option>
+      </select>
+    </div>
+    <div class="font-fab" id="font-fab">
+      <button class="font-fab-btn" onclick="changeFontSize(-0.08)">A-</button>
+      <button class="font-fab-btn" onclick="changeFontSize(0.08)">A+</button>
+    </div>
+
+    <div class="container">
+      <div class="text-reader" id="text-reader">
+        <p style="color:var(--text-dim);text-align:center;padding:3rem 0">Selecciona un capítulo para comenzar a leer</p>
+      </div>
+    </div>
+
+  </div><!-- /tab-texto -->
+
+  <footer>
+    <p class="mantra">Hare Kṛṣṇa Hare Kṛṣṇa Kṛṣṇa Kṛṣṇa Hare Hare / Hare Rāma Hare Rāma Rāma Rāma Hare Hare</p>
+    <p>Bhagavad-gītā As It Is &copy; 1972 Bhaktivedanta Book Trust</p>
+  </footer>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        document.getElementById('font-fab').classList.toggle('visible', btn.dataset.tab === 'texto' && currentChapter > 0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Theme toggle
+    const savedTheme = localStorage.getItem('gita-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? '' : 'light';
+      if (next) {
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('gita-theme', next);
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.removeItem('gita-theme');
+      }
+    });
+
+    // Preliminares dropdown
+    document.getElementById('prelim-select').addEventListener('change', function() {
+      const player = document.getElementById('prelim-player');
+      const audio = document.getElementById('prelim-audio');
+      const dl = document.getElementById('prelim-download');
+      if (!this.value) { player.style.display = 'none'; audio.pause(); return; }
+      document.getElementById('prelim-source').src = this.value;
+      dl.href = this.value + '?dl';
+      player.style.display = 'block';
+      audio.load();
+      audio.play().catch(function(){});
+    });
+
+    // Chapter data
+    const chapterNums = ['','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO'];
+    const chapterTitles = [
+      '',
+      'Observando los ejércitos en el campo de batalla de Kurukṣetra',
+      'Resumen del contenido del Gītā',
+      'Karma-yoga',
+      'Conocimiento trascendental',
+      'Karma-yoga — Acción con conciencia de Kṛṣṇa',
+      'Sāṅkhya-yoga',
+      'Conocimiento del Absoluto',
+      'Alcanzando al Supremo',
+      'El conocimiento más confidencial',
+      'La opulencia del Absoluto',
+      'La forma universal',
+      'Servicio devocional',
+      'La naturaleza, el disfrutador y la conciencia',
+      'Las tres modalidades de la naturaleza material',
+      'El yoga de la Persona Suprema',
+      'Las naturalezas divina y demoníaca',
+      'Las divisiones de la fe',
+      'Conclusión — La perfección de la renunciación'
+    ];
+
+    let gitaText = null;
+    let chapters = {};
+
+    // Populate chapter nav dropdown
+    const navChapter = document.getElementById('nav-chapter');
+    for (let i = 1; i <= 18; i++) {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = 'Cap ' + i + ' — ' + chapterTitles[i];
+      navChapter.appendChild(opt);
+    }
+
+    async function loadGita() {
+      if (gitaText) return;
+      const res = await fetch('gita_es.txt');
+      gitaText = await res.text();
+      const parts = gitaText.split(/^={50,}$/m);
+      for (let i = 0; i < parts.length; i++) {
+        const match = parts[i].match(/CAPÍTULO\s+(\S+)/);
+        if (match) {
+          const word = match[1];
+          const idx = chapterNums.indexOf(word);
+          if (idx > 0 && i + 1 < parts.length) {
+            let content = parts[i + 1];
+            const nextChapterIdx = content.indexOf('\nCAPÍTULO ');
+            if (nextChapterIdx > 0) content = content.substring(0, nextChapterIdx);
+            chapters[idx] = content;
+          }
+        }
+      }
+    }
+
+    function renderChapter(text, ch) {
+      let html = '';
+      const lines = text.split('\n');
+      let i = 0;
+      const verses = [];
+      // First pass: collect verse numbers
+      for (const line of lines) {
+        const m = line.trim().match(/^TEXTO\s+(\d+)/);
+        if (m) verses.push(m[1]);
+      }
+      // Second pass: render
+      let verseIdx = -1;
+      while (i < lines.length) {
+        const l = lines[i].trim();
+        const verseMatch = l.match(/^TEXTO\s+(\d+)/);
+        if (verseMatch) {
+          const vn = verseMatch[1];
+          verseIdx = verses.indexOf(vn);
+          const prevId = verseIdx > 0 ? 'v' + ch + '_' + verses[verseIdx - 1] : '';
+          const nextId = verseIdx < verses.length - 1 ? 'v' + ch + '_' + verses[verseIdx + 1] : '';
+          const prevBtn = prevId ? '<button class="verse-nav-btn" onclick="document.getElementById(\'' + prevId + '\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&lsaquo;</button>' : '';
+          const nextBtn = nextId ? '<button class="verse-nav-btn" onclick="document.getElementById(\'' + nextId + '\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">&rsaquo;</button>' : '';
+          html += '<div class="verse-header" id="v' + ch + '_' + vn + '"><span class="verse-num">' + l + '</span><div class="verse-nav">' + prevBtn + nextBtn + '</div></div>';
+        } else if (l === 'TRADUCCIÓN') {
+          html += '<span class="section-label">Traducción</span>';
+          i++;
+          let trans = '';
+          while (i < lines.length) {
+            const nl = lines[i].trim();
+            if (nl === 'SIGNIFICADO' || /^TEXTO\s+\d+/.test(nl) || nl === 'TRADUCCIÓN') break;
+            if (nl) trans += (trans ? ' ' : '') + nl;
+            else if (trans) { html += '<p class="translation-text">' + trans + '</p>'; trans = ''; }
+            i++;
+          }
+          if (trans) html += '<p class="translation-text">' + trans + '</p>';
+          continue;
+        } else if (l === 'SIGNIFICADO') {
+          html += '<span class="section-label">Significado</span>';
+        } else if (l) {
+          html += '<p>' + l + '</p>';
+        }
+        i++;
+      }
+      return { html, verses };
+    }
+
+    // Font size
+    let fontSize = parseFloat(localStorage.getItem('gita-font-size') || '1.08');
+    function applyFontSize() {
+      document.querySelectorAll('.text-reader').forEach(el => {
+        el.style.fontSize = fontSize + 'rem';
+      });
+    }
+    function changeFontSize(delta) {
+      fontSize = Math.max(0.8, Math.min(1.6, fontSize + delta));
+      localStorage.setItem('gita-font-size', fontSize);
+      applyFontSize();
+    }
+
+    const chapterVerses = {};
+    let currentChapter = 0;
+
+    // Load chapter into reader
+    async function openChapter(ch) {
+      if (currentChapter === ch && chapterVerses[ch]) return;
+      currentChapter = ch;
+      const reader = document.getElementById('text-reader');
+      reader.innerHTML = '<p style="color:var(--text-dim);text-align:center">Cargando...</p>';
+
+      await loadGita();
+      const content = chapters[ch];
+      if (!content) {
+        reader.innerHTML = '<p style="color:var(--text-dim);text-align:center">Capítulo no disponible.</p>';
+        return;
+      }
+
+      const { html, verses } = renderChapter(content, ch);
+      chapterVerses[ch] = verses;
+      reader.innerHTML =
+        '<div style="text-align:center;margin-bottom:2rem">' +
+          '<h2 style="font-family:Georgia,serif;font-size:1.4rem;color:var(--gold);margin-bottom:0.3rem">Capítulo ' + ch + '</h2>' +
+          '<p style="font-family:Georgia,serif;font-size:1.05rem;color:var(--gold-dim)">' + chapterTitles[ch] + '</p>' +
+        '</div>' + html;
+      applyFontSize();
+
+      // Update verse dropdown
+      const navVerse = document.getElementById('nav-verse');
+      navVerse.innerHTML = '<option value="">Verso...</option>';
+      verses.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = 'Texto ' + v;
+        navVerse.appendChild(opt);
+      });
+
+      // Show font FAB
+      document.getElementById('font-fab').classList.add('visible');
+    }
+
+    // Chapter dropdown
+    navChapter.addEventListener('change', () => {
+      const ch = parseInt(navChapter.value);
+      if (ch) openChapter(ch);
+    });
+
+    // Verse dropdown
+    document.getElementById('nav-verse').addEventListener('change', function() {
+      if (!this.value || !navChapter.value) return;
+      const el = document.getElementById('v' + navChapter.value + '_' + this.value);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+
+</body>
+</html>
